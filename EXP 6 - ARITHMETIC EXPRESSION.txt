@@ -1,0 +1,77 @@
+Program :
+#include <stdio.h>
+#include <string.h>
+#define MAX 20
+
+int Stack[MAX], top = -1;
+char expr[MAX];
+
+void Push(int ele);
+int Pop();
+
+int main() {
+    int i, a, b, c, e;
+    printf("Enter the arithmetic expression: ");
+    gets(expr); // It's better to use fgets, but kept gets as per original code
+
+    for (i = 0; i < strlen(expr); i++) {
+        if (expr[i] == '+' || expr[i] == '-' || expr[i] == '*' || expr[i] == '/') {
+            b = Pop();
+            a = Pop();
+            switch (expr[i]) {
+                case '+':
+                    c = a + b;
+                    Push(c);
+                    break;
+                case '-':
+                    c = a - b;
+                    Push(c);
+                    break;
+                case '*':
+                    c = a * b;
+                    Push(c);
+                    break;
+                case '/':
+                    c = a / b;
+                    Push(c);
+                    break;
+            }
+        } else {
+            printf("Enter the value of %c: ", expr[i]);
+            scanf("%d", &e);
+            Push(e);
+        }
+    }
+    printf("The result is %d\n", Pop());
+    return 0;
+}
+
+void Push(int ele) {
+    if (top >= MAX - 1) {
+        printf("Stack Overflow\n");
+        return;
+    }
+    top = top + 1;
+    Stack[top] = ele;
+}
+
+int Pop() {
+    if (top == -1) {
+        printf("Stack Underflow\n");
+        return -1; // Return a sentinel value to indicate an error
+    }
+    int e = Stack[top];
+    top = top - 1;
+    return e;
+}
+
+
+
+
+Output :
+Enter the arithmetic expression : abc+*d*
+Enter the value of a : 2
+Enter the value of b : 3
+Enter the value of c : 4
+Enter the value of d : 5
+The result is 70

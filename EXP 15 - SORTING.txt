@@ -1,0 +1,155 @@
+Program :(a)
+#include <stdio.h>
+
+void swap(int* a, int* b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];  // Choose the last element as the pivot
+    int i = (low - 1);  // Index of smaller element
+
+    // Traverse through all elements
+    for (int j = low; j <= high - 1; j++) {
+        // If current element is smaller than or equal to pivot
+        if (arr[j] < pivot) {
+            i++;  // Increment index of smaller element
+            swap(&arr[i], &arr[j]);  // Swap current element with index of smaller element
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);  // Swap pivot element with index of smaller element + 1
+    return (i + 1);  // Return the partitioning index
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        // pi is partitioning index, arr[pi] is now at right place
+        int pi = partition(arr, low, high);
+
+        // Separately sort elements before partition and after partition
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int arr[] = {6, 43, 8, 54, 2, 9, 32};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Original array: \n");
+    printArray(arr, n);
+
+    quickSort(arr, 0, n - 1);
+
+    printf("Sorted array with Quick Sort: \n");
+    printArray(arr, n);
+
+    return 0;
+}
+
+
+
+Output :
+Original array:
+6 43 8 54 2 9 32
+Sorted array with Quick Sort:
+2 6 8 9 32 43 54
+
+
+Program :(b)
+#include <stdio.h>
+
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;  // Size of left subarray
+    int n2 = r - m;      // Size of right subarray
+
+    // Temporary arrays to hold left and right subarrays
+    int L[n1], R[n2];
+
+    // Copy data to temporary arrays L[] and R[]
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+
+    // Merge the temporary arrays back into arr[l..r]
+    int i = 0; // Initial index for left subarray
+    int j = 0; // Initial index for right subarray
+    int k = l; // Initial index for merged subarray
+
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy the remaining elements of L[], if any
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    // Copy the remaining elements of R[], if any
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;  // Calculate middle index
+
+        // Sort first and second halves
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+
+        // Merge the sorted halves
+        merge(arr, l, m, r);
+    }
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
+
+int main() {
+    int arr[] = {42, 24, 9, 21, 76, 7, 4, 35};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Original array: \n");
+    printArray(arr, n);
+
+    mergeSort(arr, 0, n - 1);
+
+    printf("Sorted array with Merge Sort: \n");
+    printArray(arr, n);
+
+    return 0;
+}
+
+
+
+Output :
+Original array:
+42 24 9 21 76 7 4 35
+Sorted array with Merge Sort:
+4 7 9 21 24 35 42 76

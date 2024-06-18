@@ -1,0 +1,150 @@
+Program :
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for the nodes of the binary search tree
+struct node {
+    struct node *left;
+    int element;
+    struct node *right;
+};
+
+typedef struct node Node;
+
+// Function prototypes
+Node *Insert(Node *Tree, int e);
+void Inorder(Node *Tree);
+void Preorder(Node *Tree);
+void Postorder(Node *Tree);
+
+int main() {
+    Node *Tree = NULL;
+    int n, i, e, ch;
+
+    // Input number of nodes
+    printf("Enter number of nodes in the tree: ");
+    scanf("%d", &n);
+
+    // Input elements to insert into the tree
+    printf("Enter the elements:\n");
+    for (i = 1; i <= n; i++) {
+        scanf("%d", &e);
+        Tree = Insert(Tree, e);
+    }
+
+    // Menu-driven program to perform tree traversals
+    do {
+        printf("1. Inorder\n2. Preorder\n3. Postorder\n4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+
+        switch (ch) {
+            case 1:
+                printf("Inorder traversal: ");
+                Inorder(Tree);
+                printf("\n");
+                break;
+            case 2:
+                printf("Preorder traversal: ");
+                Preorder(Tree);
+                printf("\n");
+                break;
+            case 3:
+                printf("Postorder traversal: ");
+                Postorder(Tree);
+                printf("\n");
+                break;
+            case 4:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice! Please enter a valid option.\n");
+        }
+    } while (ch != 4);
+
+    return 0;
+}
+
+// Function to insert a new element into the binary search tree
+Node *Insert(Node *Tree, int e) {
+    if (Tree == NULL) {
+        Node *NewNode = malloc(sizeof(Node));
+        if (NewNode == NULL) {
+            printf("Memory allocation failed!\n");
+            exit(EXIT_FAILURE);
+        }
+        NewNode->element = e;
+        NewNode->left = NULL;
+        NewNode->right = NULL;
+        return NewNode;
+    }
+
+    if (e < Tree->element) {
+        Tree->left = Insert(Tree->left, e);
+    } else if (e > Tree->element) {
+        Tree->right = Insert(Tree->right, e);
+    }
+    return Tree;
+}
+
+// Function to perform inorder traversal of the tree (Left-Root-Right)
+void Inorder(Node *Tree) {
+    if (Tree != NULL) {
+        Inorder(Tree->left);
+        printf("%d ", Tree->element);
+        Inorder(Tree->right);
+    }
+}
+
+// Function to perform preorder traversal of the tree (Root-Left-Right)
+void Preorder(Node *Tree) {
+    if (Tree != NULL) {
+        printf("%d ", Tree->element);
+        Preorder(Tree->left);
+        Preorder(Tree->right);
+    }
+}
+
+// Function to perform postorder traversal of the tree (Left-Right-Root)
+void Postorder(Node *Tree) {
+    if (Tree != NULL) {
+        Postorder(Tree->left);
+        Postorder(Tree->right);
+        printf("%d ", Tree->element);
+    }
+}
+
+
+
+
+Output :
+Enter number of nodes in the tree : 5
+Enter the elements :
+3
+76
+32
+12
+57
+1. Inorder
+2. Preorder
+3. Postorder
+4. Exit
+Enter your choice : 1
+3 12 32 57 76
+1. Inorder
+2. Preorder
+3. Postorder
+4. Exit
+Enter your choice : 2
+3 76 32 12 57
+1. Inorder
+2. Preorder
+3. Postorder
+4. Exit
+Enter your choice : 3
+12 57 32 76 3
+1. Inorder
+2. Preorder
+3. Postorder
+4. Exit
+Enter your choice : 4
